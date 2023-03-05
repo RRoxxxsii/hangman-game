@@ -51,3 +51,157 @@ word_list = ["буква", "пельмени", "игра", "рыба", "каль
              'свидетель', 'ставка', 'сумка', 'удивление', 'хвост', 'песок', 'поворот', 'возвращение', 'мгновение',
              'статус', 'озеро', 'строй', 'параметр', 'сказка', 'тенденция', 'вина', 'дыхание', 'версия', 'масштаб',
              'монастырь', 'хозяйка', 'дочка', 'танец', 'эксплуатация', 'коммунист']
+
+
+def display_hangman(tries):
+    stages = [  # финальное состояние: голова, торс, обе руки, обе ноги
+        '''
+           --------
+           |      |
+           |      O
+           |     \\|/
+           |      |
+           |     / \\
+           -
+        ''',
+        # голова, торс, обе руки, одна нога
+        '''
+           --------
+           |      |
+           |      O
+           |     \\|/
+           |      |
+           |     / 
+           -
+        ''',
+        # голова, торс, обе руки
+        '''
+           --------
+           |      |
+           |      O
+           |     \\|/
+           |      |
+           |      
+           -
+        ''',
+        # голова, торс и одна рука
+        '''
+           --------
+           |      |
+           |      O
+           |     \\|
+           |      |
+           |     
+           -
+        ''',
+        # голова и торс
+        '''
+           --------
+           |      |
+           |      O
+           |      |
+           |      |
+           |     
+           -
+        ''',
+        # голова
+        '''
+           --------
+           |      |
+           |      O
+           |    
+           |      
+           |     
+           -
+        ''',
+        # начальное состояние
+        '''
+           --------
+           |      |
+           |      
+           |    
+           |      
+           |     
+           -
+        '''
+    ]
+    return stages[tries]
+
+
+def is_valid(user_input):
+    return user_input.isalpha()
+
+
+
+word = choice(word_list)
+
+def play_again():
+    while True:
+        if_play_agian = input("Вы хотите сыграть еще раз? [да/нет] ")
+        if if_play_agian == 'да':
+            word = choice(word_list)
+            play(word)
+        else:
+            print("Возвращайтесь!")
+            quit()
+
+def play(word):
+    word_completion = '_' * len(word)  # строка, содержащая символы _ на каждую букву задуманного слова
+    guessed = False                    # сигнальная метка
+    guessed_letters = []               # список уже названных букв
+    guessed_words = []                 # список уже названных слов
+    tries = 6                          # количество попыток
+    print('Давайте играть в угадайку слов!')
+    print("Длина  слова:", len(word))
+    print(word_completion)
+    while tries > 0:
+
+        while True:
+            user_input = input('Введите букву или целое слово :) ')
+
+            if user_input in guessed_letters:
+                print("Вы уже вводили эту букву! ")
+                continue
+            if is_valid(user_input):
+                break
+            else:
+                print('А может быть введем букву..?')
+
+        for i in range(len(word)):
+            if word[i] == user_input:
+
+                word_completion = word_completion[:i] + user_input + word_completion[i+1:]
+                guessed_letters.append(user_input)
+                print('Вы угадали букву :)')
+                guessed = True
+                continue
+            #elif user_input == word:
+                #print('Вы угадали слово. Ты молодец! ')
+                #guessed = True
+                #break
+
+        print(word_completion)
+        if user_input == word:
+            pass
+        elif user_input not in word_completion:
+            tries -= 1
+            print(display_hangman(tries))
+            print("Осталось", tries, "попыток")
+        else:
+            pass
+
+        if word == word_completion or user_input == word:
+            print("Вы победили!")
+            play_again()
+
+
+
+    if tries == 0:
+        print("Вы проиграли :(")
+        print(word)
+        play_again()
+
+
+
+
+play(word)
