@@ -1,4 +1,5 @@
 from random import *
+
 word_list = ["буква", "пельмени", "игра", "рыба", "кальмар", "дежавю", "животное", "человек",
              "азбука", "религия", "статистика", "наука", "учение", "птица", "призрак", "темнота",
              "теория", "миф", "оружие", "повар", "солдат", "еда", "война", "университет", "школа",
@@ -53,7 +54,7 @@ word_list = ["буква", "пельмени", "игра", "рыба", "каль
              'монастырь', 'хозяйка', 'дочка', 'танец', 'эксплуатация', 'коммунист']
 
 
-def display_hangman(tries):
+def display_hangman(tries: int) -> str:
     stages = [  # финальное состояние: голова, торс, обе руки, обе ноги
         '''
            --------
@@ -128,12 +129,12 @@ def display_hangman(tries):
     return stages[tries]
 
 
-def is_valid(user_input):
+def is_valid(user_input: str) -> bool:
     return user_input.isalpha()
 
 
-
 word = choice(word_list)
+
 
 def play_again():
     while True:
@@ -145,7 +146,8 @@ def play_again():
             print("Возвращайтесь!")
             quit()
 
-def play(word):
+
+def play(word: str) -> None:
     word_completion = '_' * len(word)  # строка, содержащая символы _ на каждую букву задуманного слова
     guessed = False                    # сигнальная метка
     guessed_letters = []               # список уже названных букв
@@ -169,16 +171,11 @@ def play(word):
 
         for i in range(len(word)):
             if word[i] == user_input:
-
-                word_completion = word_completion[:i] + user_input + word_completion[i+1:]
+                word_completion = word_completion[:i] + user_input + word_completion[i + 1:]
                 guessed_letters.append(user_input)
                 print('Вы угадали букву :)')
                 guessed = True
                 continue
-            #elif user_input == word:
-                #print('Вы угадали слово. Ты молодец! ')
-                #guessed = True
-                #break
 
         print(word_completion)
         if user_input == word:
@@ -194,14 +191,10 @@ def play(word):
             print("Вы победили!")
             play_again()
 
-
-
     if tries == 0:
         print("Вы проиграли :(")
         print(word)
         play_again()
-
-
 
 
 play(word)
